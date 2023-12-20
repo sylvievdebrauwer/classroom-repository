@@ -1,17 +1,26 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+// index.js
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+// Function to fetch and log data
+const fetchData = async () => {
+  try {
+    // Fetch data from your Express server
+    const response = await fetch('http://localhost:3000/amazing_ideas');
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+    // Parse the response as JSON
+    const data = await response.json();
+
+    // Log the data
+    console.log('Fetched data:', data);
+
+    // Example: Use forEach to log each item
+    data.forEach((item, index) => {
+      console.log(`Item ${index + 1}:`, item);
+    });
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+};
+
+// Call the fetchData function when the window loads
+window.onload = fetchData;
