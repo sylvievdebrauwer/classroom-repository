@@ -1,3 +1,4 @@
+//Import necessary modules
 import express from 'express';
 import * as dotenv from 'dotenv';
 import {config} from "dotenv";
@@ -7,10 +8,11 @@ import mariadb from 'mariadb';
 config()
 dotenv.config();
 
+//Configuration
 const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || "localhost";
 
-
+//Create MariaDB pool
 const pool = mariadb.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -19,36 +21,14 @@ const pool = mariadb.createPool({
     connectionLimit: 5
 });
 
+//Create express app
 const app = express();
-// Error in console log to improve the performance of the web page when adding events
-// Example for 'touchstart' event
-element.addEventListener('touchstart', handleTouchStart, { passive: true });
-// Example for 'touchmove' event
-element.addEventListener('touchmove', handleTouchMove, { passive: true });
-// Example for 'mousewheel' event
-element.addEventListener('mousewheel', handleMouseWheel, { passive: true });
 
-
-app.listen(3000, async () => {
-  console.log('Server started: http://localhost:3000/');
-  let connection 
-
-  try {
-      connection = await pool.getConnection()
-      const data = await connection.query("SELECT * FROM amazing_ideas");
-
-      console.log(data)
-  } catch (err) {
-    throw error;
-
-  } finally {
-    if (connection) connection.end();
-  }
-});
-
+//Middleware
 app.use(cors());
 app.use(express.json(/*{ limit: '50mb' }*/));
 
+//Express Routes
 app.get('/', async (req, res) => {
     let connection;
     try {
@@ -126,6 +106,23 @@ app.post('/amazing_ideas', async (req, res) => {
     }
   });
   
+  //Start Server
+app.listen(3000, async () => {
+  console.log('Server started: http://localhost:3000/');
+  let connection 
+
+  try {
+      connection = await pool.getConnection()
+      const data = await connection.query("SELECT * FROM amazing_ideas");
+
+      console.log(data)
+  } catch (err) {
+    throw error;
+
+  } finally {
+    if (connection) connection.end();
+  }
+});
 
 //app.listen(PORT, () => console.log('Server started: http:localhost:${PORT}/'))
 
